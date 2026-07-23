@@ -68,7 +68,7 @@ if (menuToggle && mobilePanel) {
 function closeMobileMenu() {
   if (!menuToggle || !mobilePanel) return;
   mobilePanel.classList.remove('is_open');
-  menuToggle.setAttribute('aria-expanded','false');
+  menuToggle.setAttribute('aria-expanded', 'false');
 }
 const sectionMap = [
   '#hero',
@@ -228,46 +228,45 @@ function marquee() {
 //페이지에 있는 marquee들을 실제로 실행
 marquee();
 
-// 프로젝트 카드가 화면에 들어오면 아래에서 위로 올라간다
-gsap.to('.feature_card',{
-  y:0,
-  opacity:1,
+//프로젝트 카드가 화면에 들어오면 아래에서 위로 나타난다
+gsap.to('.feature_card', {
+  y: 0,
+  opacity: 1,
+  duration: 0.6,
   ease: "power2.out",
-  stagger:0.22,
-  ScrollTrigger :{
-    trigger:'.geature_list',
-    start:'top 55%',
-    // 내려갈때 재생, 위로 벗어나면 다시 되감기
-    toggleActions: "play reverse play reverse"
+  stagger: 0.22,
+  scrollTrigger: {
+    trigger: '.feature_list',
+    start: 'top 55%',
+    // - onEnter, onLeave, onEnterBack, and onLeaveBack
+    //내려갈때 재생, 위로 벗어나면 다시 되감기
+    toggleActions: "play reverse play reverse",
   }
 });
 
-// 문장을 단어 단위 span으로 쪼갠다
-// 이렇게 해야 단어마다 시간차 애니메이션을 줄 수 있다
-function splitWords(selector,wordClass){
-  //selector에 맞는 텍스트 요소들을 모두 찾는다 
-  document.querySelectorAll(selector).forEach((textEl)=>{
-    // textEl 요소 안의 텍스트를 가져오ㅑㅏ 앞뒤 공백을 제거한뒤에 공백 기준으로 나누어 배열로 만드는 코드
+//문장을 단어 단위 span으로 쪼갠다
+//이렇게 해야 단어마다 시간차 애니메이션을 줄 수 있다
+function splitWords(selector, wordClass) {
+  //selector에 맞는 텍스트 요소들을 모두 찾는다
+  document.querySelectorAll(selector).forEach((textEl) => {
+    //textEl 요소 안의 텍스트를 가져와 앞뒤 공백을 제거한뒤에 공백 기준으로 나누어 배열로 만드는 코드
     const words = textEl.textContent.trim().split(/\s+/);
-    textEl.innerHTML = words.map((word)=>`<span class="${wordClass}">${word}</span>`).join(' ')
-  });
+    textEl.innerHTML = words.map((word) => `<span class="${wordClass}">${word}</span>`).join(' ')
+  })
 }
 
-// 1. 카드 큰 제목의 글자들을 각각 span.word로 감싸기 (마크업 분리)
+//카드 제목의 strong 영역을 하나씩 처리
 document.querySelectorAll('.feature_card h3 strong').forEach((titEl) => {
   const lines = titEl.querySelectorAll('.title_line');
   lines.forEach((line) => {
     const words = line.textContent.trim().split(/\s+/);
-    // [수정] 깨진 HTML 태그 문자열을 올바르게 수정했습니다.
-    line.innerHTML = words.map((word) => `<span class="word">${word}</span>`).join(' ');
+    line.innerHTML = words.map((word) => `<span class="word">${word}</span>`).join(' ')
   });
 });
+//설명문장도 motion_word단어 span으로 나눔
+splitWords('.mtauto .motion_phrase', 'motion_word');
 
-// 2. 설명 문장도 특정 클래스(motion_word)로 쪼개기 (기존 함수 호출 유지)
-splitWords('.feature_card .motion_phrase', 'motion_word');
-
-// 3. GSAP + ScrollTrigger 애니메이션 실행
-// 클래스 선택자 앞에 점('.')을 추가했습니다.
+//카드 큰 제목은 단어가 하나씩 차례로 등장
 gsap.from('.feature_card .word', {
   y: 22,
   opacity: 0,
@@ -275,40 +274,41 @@ gsap.from('.feature_card .word', {
   stagger: 0.08,
   duration: 0.8,
   scrollTrigger: {
-    trigger: '.feature_list', // HTML 구조에 맞게 .feature_card 등으로 변경 가능
+    trigger: '.feature_list',
     start: 'top 55%',
-    // 스크롤을 내릴 때 재생(play), 위로 다시 올릴 때 되감기(reverse)
-    toggleActions: "play reverse play reverse"
+    // - onEnter, onLeave, onEnterBack, and onLeaveBack
+    //내려갈때 재생, 위로 벗어나면 다시 되감기
+    toggleActions: "play reverse play reverse",
   }
 });
 
-// 카드 설명 문장도 단어 단위로 살짝 늦게 다르게 만든다
+//카드 설명 문장도 단어 단위로 살짝 늦게 따라오게 만든다
 gsap.from('.feature_card .motion_word', {
-  y: 22,
+  y: 18,
   opacity: 0,
   ease: "power2.out",
-  stagger: 0.35,
+  stagger: 0.035,
   duration: 0.7,
-  // 소문자 scrollTrigger로 변경하고 트리거 오타를 수정했습니다.
   scrollTrigger: {
-    trigger: '.feature_list', // HTML 구조에 맞게 .feature_card 등으로 변경 가능
+    trigger: '.feature_list',
     start: 'top 55%',
-    // 스크롤을 내릴 때 재생(play), 위로 다시 올릴 때 되감기(reverse)
-    toggleActions: "play reverse play reverse"
+    // - onEnter, onLeave, onEnterBack, and onLeaveBack
+    //내려갈때 재생, 위로 벗어나면 다시 되감기
+    toggleActions: "play reverse play reverse",
   }
 });
 
-// 카드 위에 마우스를 올리면 빛이 따라다니는 것처럼 보이는 레이어를 만든다
-document.querySelectorAll('.feature_card').forEach((card)=>{
+//카드 위에 마우스를 올리면 빛이 따라다니는 것처럼 보이는 레이어를 만든다
+document.querySelectorAll('.feature_card').forEach((card) => {
   const glass = document.createElement('div');
   glass.className = 'glass_reflect';
   card.appendChild(glass);
 
-  // 카드 위에서 마우스가 움질일때마다 빛 위치를 바꾼다
-  card.addEventListener('mousemove',(e)=>{
-    // 카드의 화면 위치와 크기를 가져온다
+  //카드 위에서 마우스가 움직일때마다 빛 위치를 바꾼다
+  card.addEventListener('mousemove', (e) => {
+    //카드의 화면 위치와 크기를 가져온다
     const rect = card.getBoundingClientRect();
-    // 마우스 x좌표를 카드 안쪽 기준으로 바꾼다
+    //마우스 x좌표를 카드 안쪽 기준으로 바꾼다
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     // 마우스 위치를 중심으로 노란 빛이 퍼지는 배경을 만든다.
@@ -321,70 +321,70 @@ document.querySelectorAll('.feature_card').forEach((card)=>{
     `;
   });
 
-  card.addEventListener('mouseleave',()=>{
-    glass.style.background ='transparent';
+  card.addEventListener('mouseleave', () => {
+    glass.style.background = 'transparent';
   })
 });
 
-// 카드 안쪽 레이어를 마우스 위치에 맞춰 살짝 기울인다
-// rotateX rotateY만 바꾸기
-document.querySelectorAll('.tit_card').forEach((card)=>{
+//카드 안쪽 레이어를 마우스 위치에 맞춰 살짝 기울인다
+//rotateX rotateY만 바꾸기
+document.querySelectorAll('.tit_card').forEach((card) => {
   const layer = card.querySelector('.tit_layer');
-  // 레이어가 없으면 이 카드는 건너뛴다
-  if(!layer) return;
+  //레이어가 없으면 이 카드는 건너뛴다
+  if (!layer) return;
 
-  // 카드 위에서 마우스를 움직일때 기울기 값을 계산
-  card.addEventListener('mousemove',(e)=>{
-    const rect = card.getClientRects();
-    // 카드안에서 마우스가 가로로 몇퍼센트 위치인지 계산
+  //카드 위에서 마우스를 움직일때 기울기 값을 계산
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    //카드안에서 마우스가 가로로 몇퍼센트 위치인지 계산
     const px = (e.clientX - rect.left) / rect.width;
     const py = (e.clientY - rect.top) / rect.height;
-    // 위아래 위치를 rotateX 각도로 바꾼다
+    //위아래 위치를 rotateX 각도로 바꾼다
     const rx = (py - 0.5) * -15;
     const ry = (px - 0.5) * 22;
 
     //계산한 각도를 안쪽 레이어 transform에 적용
-    layer.style.transform = `translateZ(0) rotateX(${rx}deg) rotateY(${ry}deg)`
+    layer.style.transform = `translateZ(0) rotateX(${rx}deg) rotateY(${ry}deg)`;
 
     card.addEventListener('mouseleave', () => {
-      layer.style.transform = `translateZ(0) rotateX(0deg) rotateY(0deg)`
+      layer.style.transform = `translateZ(0) rotateX(0deg) rotateY(0deg)`;
     })
   })
 });
 
+
 const stickyBox = document.querySelector('.sticky_box');
-const processCards = gsap.utils.toArray('..projects_all .card');
+const processCards = gsap.utils.toArray('.projects_all .card');
 
-processCards.forEach((card,index)=>{
-  // 카드 순서에 맞는 이미지 파일 경로를 만든다
-  const imgUrrl = `asset/info${index+1}.png`;
+processCards.forEach((card, index) => {
+  //카드 순서에 맞는 이미지 파일 경로를 만든다
+  const imgUrl = `asset/info${index + 1}.png`;
 
-  // 카드가 화면 중앙에 들어오는 순간 감지
+  //카드가 화면 중앙에 들어오는 순간 감지
   ScrollTrigger.create({
-    trigger:card,
+    trigger: card,
     start: 'top center',
-    end : 'bottom center',
-    onEnter:()=>changeBg(imgUrl),
-    onEnterBack:()=>changeBg(imgUrl),
+    end: 'bottom center',
+    onEnter: () => changeBg(imgUrl),
+    onEnterBack: () => changeBg(imgUrl),
   });
 })
 
-// sticky 박스에 이미지를 바로 바꾸면 딱닥해서 살짝 줄였다가 다시 키우며 교체
-function changeBg(imgUrl){
-  if(!stickyBox) return;
+//sticky 박스의 이미지를 바로 바꾸면 딱닥해서 살짝 줄였다가 다시 키우며 교체
+function changeBg(imgUrl) {
+  if (!stickyBox) return;
 
   gsap.to(stickyBox, {
-    opacity:0.72,
-    scale:0.98,
-    duration:0.2,
+    opacity: 0.72,
+    scale: 0.98,
+    duration: 0.2,
     onComplete: () => {
       stickyBox.style.backgroundImage = `url(${imgUrl})`;
-      gsap.to(stickyBox,{opacity:1, scale:1, duration:0.42});
+      gsap.to(stickyBox, { opacity: 1, scale: 1, duration: 0.45 });
     }
   })
 }
-
-// 처음 화면에 들어오기 전 기본 sticky 이미지를 1번으로 세팅
+//처음 화면에 들어오기 전 기본 sticky 이미지를 1번으로 세팅
 changeBg(`asset/info1.png`);
 
 const pinBg = document.getElementById('pin_bg');
@@ -392,15 +392,15 @@ const photos = gsap.utils.toArray('.photo');
 
 //showcase 섹션은 화면을 고정한 상태에서 사진들이 차례대로 올라온다
 const pinTl = gsap.timeline({
-  scrollTrigger : {
-    trigger : '.pin_scene',
-    start : 'top top',
-    // 1800px 스크롤 하는 동안 타임라인이 진행된다
-    end:'+=1800',
-    // 섹션을 화면에 고정해서 사진이 올라오는 무대를 만든다
-    pin : true,
+  scrollTrigger: {
+    trigger: '.pin_scene',
+    start: 'top top',
+    //1800px 스크롤 하는 동안 타임라인이 진행된다
+    end: '+=1800',
+    //섹션을 화면에 고정해서 사진이 올라오는 무대를 만든다
+    pin: true,
     // 스크롤 위치와 애니메이션 진행도를 연결
-
+    scrub: true,
     // pin이 시작될 때 생길 수 있는 튐을 줄인다.
     anticipatePin: 1,
     // 새로고침이나 리사이즈 때 값을 다시 계산한다.
@@ -410,37 +410,37 @@ const pinTl = gsap.timeline({
   }
 });
 
-// 배경 이미지를 살짝 흐리고 키워서 뒤로 밀리는 느낌을 만든다
-pinTl.to(pinBg,{filter:'blur(12px',scale:1.06,duration:1,ease:'none'},0);
+//배경 이미지를 살짝 흐리고 키워서 뒤로 밀리는 느낌을 만든다
+pinTl.to(pinBg, { filter: 'blur(12px', scale: 1.06, duration: 1, ease: 'none' }, 0);
 
-// 사진마다 살짝 다른 각도와 giltch 효과를 줘서 디자인 갤러리 처럼 겹쳐 보이게 한다
-photos.forEach((photo,index)=>{
-  // 사진이 등장하기 직전에 레이어 순서와 giltch 클래스 조정
-  pinTl.add(()=>{
-    // 뒤에 나온 사진이 앞쪽에 쌓이도록 z-index 올림
-    photo.style.zIndex = String(100+index);
-    photo.classList.add('.glitch');
-    // 0.4초 뒤 glitch 클래스를 제거해 효과를 끝낸다
-    gsap.delayedCall(0.4,()=photo.classList.remove('glitch'));
-  }, index *0.22);
+//사진마다 살짝 다른 각도와 giltch 효과를 줘서 디자인 갤러리 처럼 겹쳐 보이게 한다
+photos.forEach((photo, index) => {
+  //사진이 등장하기 직전에 레이어 순서와 giltch클래스를 조정
+  pinTl.add(() => {
+    //뒤에 나온 사진이 앞쪽에 쌓이도록 z-index 올림
+    photo.style.zIndex = String(100 + index);
+    photo.classList.add('glitch');
+    //0.4초 뒤 glitch 클래스를 제거해 효과를 끝낸다
+    gsap.delayedCall(0.4, () => photo.classList.remove('glitch'));
+  }, index * 0.22);
 
-  // 사진을 숨겨진 시작 상태에서 보이는 상태로 이동시킨다
-  pinTl.fromTo(photo,{
-    opacity:0,
-    y:1080,
-    scale:0.4,
-    filter:'blur(6px)',
-    rotate:(index%2) ? 4 : -4,
-  },{
-    opacity:1,
-    y:0,
-    scale:1,
-    filter:'blur(0px)',
-    rotate:(index%2) ? 5 : -5,
+  //사진을 숨겨진 시작 상태에서 보이는 상태로 이동시킨다
+  pinTl.fromTo(photo, {
+    opacity: 0,
+    y: 1080,
+    scale: 0.4,
+    filter: 'blur(6px)',
+    rotate: (index % 2) ? 4 : -4,
+  }, {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: 'blur(0px)',
+    rotate: (index % 2) ? 5 : -5,
     duration:0.85,
-    // 빠르게 올라온 뒤 부드럽게 멈추게 한다
+    //빠르게 올라온 뒤 부드럽게 멈추게 한다
     ease:'power3.out',
-  }, index *0.22)
+  }, index * 0.22)
 });
 
 // 사진 묶음 전체를 마지막에 조금 위로 올려 장면이 마무리되는 느낌을 준다.

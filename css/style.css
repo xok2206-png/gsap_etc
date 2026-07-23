@@ -60,7 +60,7 @@ body {
   --en-lang1: 'Roboto', sans-serif;
   --en-lang2: 'DM Serif Text', serif;
   --en-lang3: 'Merriweather', serif;
-  --color-white-12:rgba(255,255,255,0.12);
+  --color-white-12: rgba(255, 255, 255, 0.12);
 }
 
 .title_gra {
@@ -280,7 +280,6 @@ h1 a img {
   font-weight: 800;
   transform: translateY(12px);
   opacity: 0;
-  
 }
 
 
@@ -470,7 +469,7 @@ h1 a img {
   margin-top: 6px;
   line-height: 1.35;
   max-width: 33ch;
-  color: rgba(255,255,255,.68);
+  color: rgba(255, 255, 255, .68);
   font-size: 0.95rem;
 }
 
@@ -486,6 +485,7 @@ h1 a img {
   transition: background 0.4s ease-out;
   mix-blend-mode: screen;
   /* 빛이 섞이듯 표현 */
+
 }
 
 .feature_card .word,
@@ -528,8 +528,9 @@ h1 a img {
   align-items: flex-start;
   padding: 50vh 0;
 }
+
 .info_section .info_tit {
-  width: clamp(300px,40vw,500px);
+  width: clamp(300px, 40vw, 500px);
   min-height: calc(100vh - 120px);
   position: sticky;
   top: 96px;
@@ -538,16 +539,16 @@ h1 a img {
 
 .info_section .info_tit h2 {
   line-height: 1.1;
-  opacity: 0.5;
+  /* opacity: 0.5; */
 }
 
 .section_lead {
   min-width: 440px;
-  margin: 20px 0;
+  margin: 20px 0 24px;
   color: var(--ink);
   font-size: 0.8rem;
   font-weight: 100;
-  opacity: 0.5;
+  /* opacity: 0.5; */
 }
 
 .sticky_box {
@@ -556,7 +557,7 @@ h1 a img {
   background-size: cover;
   background-position: center;
   border-radius: 24px;
-  
+  box-shadow: 0 24px 70px rgba(108, 80, 27, .08);
 }
 
 .info_section .projects_all {
@@ -569,17 +570,19 @@ h1 a img {
 .info_section .projects_all .card {
   position: relative;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 0% 0%, color-mix(in oklch, #ff8a1e 72%, white) 0 18%, transparent 42%),
-    radial-gradient(circle at 100% 12%, #ffe2a6 0 16%, transparent 42%),
-    linear-gradient(135deg, color-mix(in oklch, #ff8a1e 8%, white), color-mix(in oklch, #ffe2a6 18%, black));
-    
-    min-height: 52vh;
-    border-radius: 22px;
-    padding: clamp(28px, 4vw, 54px);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+  background-color: #101827;
+  background-image:
+    radial-gradient(circle at 18% 26%, color-mix(in oklch, #ff8a1e 88%, white) 0 14%, transparent 38%),
+    radial-gradient(circle at 82% 22%, color-mix(in oklch, #101827 74%, white) 0 16%, transparent 42%),
+    repeating-radial-gradient(circle at 52% 58%, transparent 0 25px, color-mix(in oklch, #ff8a1e 34%, transparent) 26px 27px, transparent 28px 50px),
+    conic-gradient(from 118deg at 50% 50%, #ff8a1e, #101827, color-mix(in oklch, #ff8a1e 42%, #101827), #ff8a1e);
+  background-blend-mode: screen, lighten, overlay, normal;
+  min-height: 52vh;
+  border-radius: 22px;
+  padding: clamp(28px, 4vw, 54px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .projects_all .card::before {
@@ -624,16 +627,25 @@ h1 a img {
   z-index: 2;
   background:
     radial-gradient(circle at 70% 22%, rgba(242, 208, 70, .16), transparent 30%),
-    linear-gradient(180deg, #11141b 0%, #191c25 100%);;
+    linear-gradient(180deg, #11141b 0%, #191c25 100%);
+}
+
+.pin_layer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .pin_bg {
   position: absolute;
   inset: -2px;
+  background-image: url('../asset/case_gallery.png');
   background-size: cover;
-  
+  background-position: center;
+  transform: translateZ(0);
+  will-change: transform, filter;
 }
-
 .pin_overlay {
   position: absolute;
   inset: 0;
@@ -675,6 +687,138 @@ h1 a img {
   font-weight: 800;
   text-transform: uppercase;
 }
+
+.float_wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.photo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(.9);
+  width: min(40vw, 480px);
+  height: min(52vw, 640px);
+  border-radius: 18px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  filter: blur(6px);
+  will-change: transform, filter, opacity;
+}
+
+.photo_label {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2;
+  display: inline-flex;
+  width: fit-content;
+  padding: 8px 11px;
+  border-radius: 999px;
+  background: rgba(15, 17, 21, .68);
+  color: var(--accent);
+  font-size: .78rem;
+  font-weight: 800;
+  backdrop-filter: blur(10px);
+}
+
+.p1 {
+  background-image: url(../asset/p1.png);
+}
+
+.p2 {
+  background-image: url(../asset/p2.png);
+}
+
+.p3 {
+  background-image: url(../asset/p3.png);
+}
+
+.p4 {
+  background-image: url(../asset/p4.png);
+}
+
+.p5 {
+  background-image: url(../asset/p5.png);
+}
+
+.p6 {
+  background-image: url(../asset/p6.png);
+}
+
+.photo.glitch::before,
+.photo.glitch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  background-size: inherit;
+  background-position: inherit;
+  mix-blend-mode: screen;
+  opacity: .6;
+  pointer-events: none;
+}
+
+.photo.glitch::before {
+  transform: translate(2px, 0);
+  filter: hue-rotate(30deg) saturate(1.2);
+}
+
+.photo.glitch::after {
+  transform: translate(-2px, 0);
+  filter: hue-rotate(-30deg) saturate(1.2);
+}
+
+@keyframes glitch_slices {
+  0% {
+    clip-path: inset(0 0 90% 0);
+    transform: translateX(-1px);
+  }
+
+  20% {
+    clip-path: inset(10% 0 70% 0);
+    transform: translateX(2px);
+  }
+
+  40% {
+    clip-path: inset(40% 0 40% 0);
+    transform: translateX(-2px);
+  }
+
+  60% {
+    clip-path: inset(65% 0 20% 0);
+    transform: translateX(1px);
+  }
+
+  80% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translateX(-1px);
+  }
+
+  100% {
+    clip-path: inset(0 0 90% 0);
+    transform: translateX(0);
+  }
+}
+
+.photo.glitch::before {
+  animation: glitch_slices .35s steps(6) both;
+}
+
+.photo.glitch::after {
+  animation: glitch_slices .35s steps(6) reverse both;
+}
+
 
 /* horizontal_section */
 .horizontal_section {
